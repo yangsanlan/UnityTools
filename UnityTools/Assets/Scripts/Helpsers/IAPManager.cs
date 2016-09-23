@@ -2,7 +2,7 @@
 //  IAPManager.cs
 //  UnityTools
 //
-//  Created by DefaultCompany on 6/22/2016.
+//  Created by JYMain on 6/22/2016.
 //
 
 using System;
@@ -66,7 +66,17 @@ public class IAPManager : IStoreListener
             {
                 ids.Add(IAPSetting.Products[i].WindowsStoreProductId, WindowsStore.Name);
             }
+            if (!string.IsNullOrEmpty(IAPSetting.Products[i].AmazonStoreProductId))
+            {
+                ids.Add(IAPSetting.Products[i].AmazonStoreProductId, AmazonApps.Name);
+            }
             builder.AddProduct(IAPSetting.Products[i].Id, IAPSetting.Products[i].Type, ids);
+        }
+
+        if (IAPSetting.SandboxEnable)
+        {
+            builder.Configure<IAmazonConfiguration>().WriteSandboxJSON(builder.products);
+            builder.Configure<IMicrosoftConfiguration>().useMockBillingSystem = true;
         }
         UnityPurchasing.Initialize(this, builder);
     }
@@ -140,7 +150,7 @@ public class IAPManager : IStoreListener
             var dic = SimpleJson.SimpleJson.DeserializeObject<Dictionary<string, object>>(e.purchasedProduct.receipt);
             var store = "";
 #if UNITY_ANDROID
-            store = dic["Store"].ToString(); 
+            store = dic["Store"].ToString();
 #elif UNITY_WSA
             store = "WinRT"
 #endif
@@ -195,6 +205,7 @@ public class IAPManager : IStoreListener
     /// <param name="extensions"></param>
     public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
     {
+        Debug.Log("OnInitialized");
         StoreController = controller;
         ExtensionProvider = extensions;
     }
@@ -263,6 +274,7 @@ public class IAPSetting
 {
     public string GooglePublicKey;
     public MarkProduct[] Products;
+    public bool SandboxEnable;
 }
 
 public class MarkProduct
@@ -273,4 +285,5 @@ public class MarkProduct
     public string MacStoreProductId;
     public ProductType Type;
     public string WindowsStoreProductId;
+    public string AmazonStoreProductId;
 }
