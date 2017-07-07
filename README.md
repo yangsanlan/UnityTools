@@ -11,5 +11,5 @@
 2.增加文件署名，<br/>将UnityTools\81-C# Script-NewBehaviourScript.cs替换位置：untiy安装路径..\Editor\Data\Resources\ScriptTemplates\81-C# Script-NewBehaviourScript.cs
 
 <b>2017年7月7日</b><br/>
-1.增加生成sudoku的随机解法，采用递归方法
-  可延伸出：a.求解残局，b.存在的数独是否有解，c.设置数独难度，
+1.增加生成9x9 sudoku的随机解法，采用递归方法
+  可延伸出：a.求解残局，b.存在的数独是否有解，c.设置数独难度，d.生成非9x9的数独解法
